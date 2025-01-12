@@ -1,35 +1,51 @@
-#importing requireds modules
+# Import necessary libraries
 import pywhatkit
 import datetime
+from dotenv import load_dotenv
+import os
+
+# Import functions for listening and speaking
 from Head.Listen import *
 from Head.speak import *
 
-#defining hour and minutes
+# Load environment variables from .env file
+load_dotenv()
+
+# Get contact numbers from environment variables (stored securely in .env)
+contacts = {"name": os.getenv("CONTACT_NAME")}  # Add more in .env as needed
+
+# Get current time for scheduling messages
 minu = datetime.datetime.now().minute
 hour = datetime.datetime.now().hour
 
-contacts = {
-    "contact name" : "contact nunber"
-    #Add more here
-}
 
-
-#function to send whatsapp message (make sure you are login on whatsapp web)
 def SendWhatsMsg():
-    print("Whom do you want to send message")
+    """
+    Function to send a WhatsApp message using pywhatkit.
+    """
+    print("Whom do you want to send message?")
     say("Whom do you want to send message?")
+
+    # Listen for the recipient's name
     name = takeCommand().lower()
     number = contacts.get(name)
+
     if name in contacts:
         try:
             print("What is the message you want to send?")
             say("What is the message you want to send?")
+
+            # Listen for the message to send
             msg = takeCommand().lower()
             msg = msg.capitalize()
-            msg = pywhatkit.sendwhatmsg(number, msg, hour,minu)
+
+            # Schedule and send the message
+            pywhatkit.sendwhatmsg(number, msg, hour, minu)
         except:
+            # Handle any errors in sending the message
             print("Error")
-            say("Sorry sir an error has occurred, i couldn't send this message")
+            say("Sorry sir, an error has occurred, I couldn't send this message")
     else:
-        print(f"{number}not found in database")
-        say(f"Sorry sir i couldn't found {number} in my data")
+        # Handle cases where the contact is not found
+        print(f"{name} not found in database")
+        say(f"Sorry sir, I couldn't find {name} in my data")

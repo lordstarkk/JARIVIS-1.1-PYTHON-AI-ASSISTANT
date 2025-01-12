@@ -1,41 +1,72 @@
 import smtplib
 import speech_recognition as sr
 from email.mime.text import MIMEText
+from dotenv import load_dotenv
+import os
 from Head.speak import *
 from Head.Listen import *
 
+# Load environment variables from .env file
+load_dotenv()
+
+# Get sensitive data from the .env file
+SENDER_EMAIL = os.getenv("SENDER_EMAIL")
+SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
+
+# Predefined list of recipients and their corresponding emails
 mails = {
-    "recipietent name": "recipietent mail"
-    #add more here
+    "name": "recipient_email@example.com",
+    # Add more entries as needed
 }
+
 def SendMails():
-    say("Whom Should i send the mail")
-    print("Tell me the name of reciver")
+    # Ask the user for the recipient name
+    say("Whom should I send the mail?")
+    print("Tell me the name of the receiver")
+    
+    # Take command from the user to get the recipient name
     recipient = takeCommand().lower()
+
+    # Get the email address for the recipient
     recipientMail = mails.get(recipient)
-    if recipient in mails:
+    
+    if recipientMail:
+        # Initialize the SMTP server
         s = smtplib.SMTP('smtp.gmail.com', 587)
         s.starttls()
-        s.login("sendermail@sender.com", "passwordHere")
-        print("Whats the subject?")
-        say("What is the subject of this mail")
+
+        # Login to the sender's email account
+        s.login(SENDER_EMAIL, SENDER_PASSWORD)
+        
+        # Ask for the subject of the email
+        print("What's the subject?")
+        say("What is the subject of this mail?")
         subject = takeCommand()
-        print("What is the massage?")
-        say("What is the massage?")
-        msg = f"{takeCommand()}\n This Message is sent by Stark's virtual assitant JARVIS"
-        s.sendmail("sendermail@sender.com", recipientMail, 'Subject: {}\n\n{}'.format(subject, msg))
+
+        # Ask for the message content
+        print("What is the message?")
+        say("What is the message?")
+        msg = f"{takeCommand()}\n\nThis message is sent by Stark's virtual assistant JARVIS."
+
+        # Send the email
+        s.sendmail(SENDER_EMAIL, recipientMail, f'Subject: {subject}\n\n{msg}')
+        
         try:
-            print("Sending mail..")
-            say("Sending mail sir")
+            # Notify the user about the mail being sent
+            print("Sending mail...")
+            say("Sending mail, sir.")
         except Exception as e:
-            print("Could not sent")
-            say("Sorry sir i could not send this mail")
+            print("Could not send the email.")
+            say("Sorry, sir, I could not send this mail.")
+        
+        # Close the SMTP session
         s.quit()
-        print("Mail was sent Succesfully")
-        say("Mail was sent Succesfully Sir. what else i can do for you")
-
+        
+        # Confirm that the email was successfully sent
+        print("Mail was sent successfully.")
+        say("Mail was sent successfully, Sir. What else can I do for you?")
+    
     else:
-        print(f"{recipient} not found")
-        say(f"Sorry sir i could not found {recipient} in my Memory")
-
-
+        # If the recipient is not found, notify the user
+        print(f"{recipient} not found.")
+        say(f"Sorry, sir, I could not find {recipient} in my memory.")
