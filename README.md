@@ -3,6 +3,11 @@
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green)](https://opensource.org/licenses/MIT)
 
+⚠️ Legacy Build — Not My Current Level
+This was created during my first phase of learning Python. The architecture is messy by modern standards, but it represents raw experimentation and growth. A refined, minimal Jarvis will replace this.
+
+
+
 J.A.R.V.I.S (Just A Rather Very Intelligent System) is an AI assistant built by **Nirbhay** (a.k.a Strange Stark), inspired by the fictional AI from *Iron Man*. This assistant performs a variety of tasks, such as answering questions, controlling system operations, and providing smart responses, all powered by Python and external APIs.
 
 ## 🌟 Features
